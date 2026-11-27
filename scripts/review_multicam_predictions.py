@@ -1001,7 +1001,7 @@ def make_canvas(bundle: Bundle, time_idx: int, show_bbox: bool, traj_index: Traj
                 active_cameras: set[str], trajectory_mask_mode: bool,
                 time_input_text: str, time_input_active: bool,
                 artifact_mode: bool, artifact_pos: int, artifact_total: int,
-                status_text: str) -> tuple[np.ndarray, datetime, dict[str, tuple[CameraEntry, Optional[int], float]], dict[str, PanelMeta]]:
+                status_text: str, tail_start_min: Optional[datetime] = None) -> tuple[np.ndarray, datetime, dict[str, tuple[CameraEntry, Optional[int], float]], dict[str, PanelMeta]]:
     abs_time = bundle.timeline[time_idx]
     context = resolve_time_context(bundle, abs_time)
 
@@ -1028,6 +1028,8 @@ def make_canvas(bundle: Bundle, time_idx: int, show_bbox: bool, traj_index: Traj
     raw_ignored, raw_idx = traj_index.ignore_state_at_time(abs_time)
     if show_tail:
         tail = traj_index.tail(abs_time, seconds=120.0)
+        if tail_start_min is not None:
+            tail = tail[tail["absolute_time"] >= pd.Timestamp(tail_start_min)]
 
     x_cm = float(traj_row["x_cm"]) if traj_row is not None else None
     y_cm = float(traj_row["y_cm"]) if traj_row is not None else None

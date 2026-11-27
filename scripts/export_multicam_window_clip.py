@@ -238,6 +238,7 @@ def run(args: argparse.Namespace) -> Path:
         artifact_pos=0,
         artifact_total=0,
         status_text="",
+        tail_start_min=start_dt,
     )
     h, w = first_canvas.shape[:2]
     writer = make_writer(out_path, width=w, height=h, fps=float(args.output_fps))
@@ -259,6 +260,7 @@ def run(args: argparse.Namespace) -> Path:
                 artifact_pos=0,
                 artifact_total=0,
                 status_text="",
+                tail_start_min=start_dt,
             )
             writer.write(canvas)
 
